@@ -1,0 +1,9 @@
+.ipynb_checkpoints/
+__pycache__/
+*.pyc
+env/          # 忽略本地创建的 conda 环境目录
+venv/
+.env
+data/
+special_results
+experiments/
