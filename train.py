@@ -18,20 +18,20 @@ from models.RicianNet import RicianNet
 # 1. 核心实验配置区 (Centralized Configuration)
 # ==========================================
 CONFIG = {
-    "experiment_name": "RicianNet_random_Patch128_AdamW", # 实验名称，用于区分后续不同模型
+    "experiment_name": "RicianNet_sliding_Patch64", # 实验名称，用于区分后续不同模型
     "model_type": "RicianNet",
     "optimizer_type": "AdamW",  # 'Adam' 或 'AdamW'
-    "dataset_mode": "random",       # 'random' (随机裁剪), 'sliding' (滑动窗口), 'full' (全图填充)
-    "patch_size": 128,               # 裁剪大小
+    "dataset_mode": "sliding",       # 'random' (随机裁剪), 'sliding' (滑动窗口), 'full' (全图填充)
+    "patch_size": 64,               # 裁剪大小
     "stride": 32,                    # 滑动窗口步长
-    "batch_size": 16,               # 8GB显存可轻松应对 64 或 128
-    "num_epochs": 100,               # 训练轮数
+    "batch_size": 128,               # 8GB显存可轻松应对 64 或 128
+    "num_epochs": 50,               # 训练轮数
     "learning_rate": 1e-4,          # 初始学习率
     "weight_decay": 1e-4,
     "noise_range": (0, 0.3),    # Rician 噪声区间
     "data_dir": "data/processed/train", # 训练集路径
     "save_dir": "experiments",       # 实验结果统一保存路径
-    "resume_weight": None # 可选：预训练权重路径，若不使用预训练则设为 None
+    "resume_weight": None # 可选: 预训练权重路径，若不使用预训练则设为 None
 }
 
 def train():

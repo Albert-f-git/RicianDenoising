@@ -20,17 +20,20 @@ CONFIG = {
         # "Adam_Baseline": "experiments\DnCNN_Baseline_Patch64_Adam_20260302_190727\model_weights.pth",
         # "DnCNN_Optimized": "experiments\DnCNN_Baseline_AdamW_20260302_200103\model_weights.pth",
         # "DnCNN_Random_Patch64": "experiments\DnCNN_Random_Patch64_AdamW_20260303_095649\model_weights.pth",
-        "DnCNN_Sliding_Patch64_Slide14": "experiments\DnCNN_Sliding_Patch64_Stride14_AdamW_20260302_230306\model_weights.pth",
+        # "DnCNN_Sliding_Patch64_Slide14": "experiments\DnCNN_Sliding_Patch64_Stride14_AdamW_20260302_230306\model_weights.pth",
         # "DnCNN_Sliding_Patch64_Slide32": "experiments\DnCNN_Sliding_Patch64_Stride32_AdamW_20260306_094004\model_weights.pth",
         # "UNet_Baseline1e-4": "experiments\\Unet_Baseline_AdamW_1e-4_20260305_125730\model_weights.pth",
         # "UNet_Baseline1e-3": "experiments\\Unet_Baseline_AdamW_1e-3_20260306_114041\model_weights.pth",
-        "UNet_Sliding_Patch64_Slide14": "experiments\\Unet_Sliding_Patch64_Stride14_AdamW_20260305_133805\model_weights.pth",
+        # "UNet_Sliding_Patch64_Slide14": "experiments\\Unet_Sliding_Patch64_Stride14_AdamW_20260305_133805\model_weights.pth",
         # "UNet_Sliding_Patch64_Slide32": "experiments\\Unet_Sliding_Patch64_Stride32_AdamW_20260306_121908\model_weights.pth",
         # "UNet_Random_Patch64": "experiments\\Unet_Random_Patch64_AdamW_20260306_135850\model_weights.pth", # Unet_Random_Patch64_AdamW_Epoch800
         "RicianNet_Baseline": "experiments\RicianNet_baseline_AdamW_20260306_161247\model_weights.pth", # RicianNet_baseline_AdamW
         # "RicianNet_Padded_Reflect": "experiments\RicianNet_pedding_reflect_AdamW_20260306_210919\model_weights.pth", # RicianNet_pedding_reflect_AdamW
         # "RicianNet_padding_zeros_cleaned": "experiments\RicianNet_padding_zeros_cleaned_AdamW_20260307_171156\model_weights.pth", # RicianNet_padding_zeros_cleaned_AdamW
-        "RicianNet_Random_Patch128": "experiments\RicianNet_random_Patch128_AdamW_20260307_203419\model_weights.pth" # RicianNet_random_Patch128_AdamW_Epoch100
+        "RicianNet_Random_Patch128": "experiments\RicianNet_random_Patch128_AdamW_20260307_203419\model_weights.pth", # RicianNet_random_Patch128_AdamW_Epoch100
+        "RicianNet_Random_Patch64": "experiments\RicianNet_random_Patch64_20260309_100743\model_weights.pth", # RicianNet_random_Patch64
+        "RicianNet_Random_Patch64_Epoch400": "experiments\RicianNet_random_Patch64_Epoch400_20260309_104728\model_weights.pth", # RicianNet_random_Patch64_Epoch400
+        "RicianNet_Sliding_Patch64_Stride32": "experiments\RicianNet_sliding_Patch64_20260309_121904\model_weights.pth", # RicianNet_sliding_Patch64
     },
     "images": [
         {"path": "data\special_test\\brain1_simulate.png", "type": "simulated"}, 
@@ -47,8 +50,8 @@ CONFIG = {
     #     {"path": "data\special_test\\brain4_real.png", "type": "real"},
     #     {"path": "data\special_test\\brain5_real.png", "type": "real"}
     # ],
-    "noise_level": 0.1,          
-    "save_dir": "special_results\\3models_comparison" 
+    "noise_level": 0.10,          
+    "save_dir": "special_results\\RicianNet_comparison" 
 }
 
 def add_rician_noise(clean_img, sigma):

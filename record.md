@@ -3,7 +3,7 @@
 **A**: 虽然看起来数据量没有提升，但是随机裁剪是在线动态的，同一张图片在每个*Epoch*中裁剪出的图像块是不一样的。也就是说每次裁剪相当于从很多不同的图像块中随机选出一个，从而达到实际数据量远大于图片数量，同时又不用将所有不同剪切方法保存在本地存储。这种随即剪切搭配随机噪声使得网络学习的数据量大幅提升。
 
 >2. **Q**: 对训练集加噪的过程应该放在裁剪前还是裁剪后？
-**A**: 应该放在裁剪后。如果在裁剪前对图像进行加噪，那么在裁剪后，对图片的剩余区域加噪所进行的运算就完全浪费了。同时，根据Rician噪声的模型：
+**A**: 应该放在裁剪后。如果在裁剪前对图像进行加噪，那么在裁剪后，对图片的剩余区域加噪所进行的运算就完全浪费了。同时，根据Rician噪声的模型: 
 $$ f = \sqrt{(u + n_1)^2 + n_2^2}, \quad n_1, n_2 \sim N(0, \sigma^2) $$
 这个运算是针对像素进行处理的，因此裁剪后加噪没有问题。
 
@@ -15,7 +15,7 @@ $$ f = \sqrt{(u + n_1)^2 + n_2^2}, \quad n_1, n_2 \sim N(0, \sigma^2) $$
 ![无效实例1](data\record\PD_axial_003.png) ![无效实例2](data\record\PD_axial_018.png) ![无效实例3](data\record\PD_axial_154.png) 
 ![无效实例4](data\record\PD_axial_154.png) ![无效实例5](data\record\PD_coronal_018.png)
     **最终解决**
-  产生伪影的原因是全图作输入训练的过程中统一padding至尺寸$ 224\times 224 $(原因：1. 每个batch需要同一维度，而训练集中有$ 217\times181 $和$ 181\times217 $两种尺寸；2. Unet中输入尺寸必须为$16$的倍数)，这导致*RicianNet*的训练输入中会额外添加$ 0 $边界填充，从而导致学习结果产生边缘伪影。
+  产生伪影的原因是全图作输入训练的过程中统一padding至尺寸$ 224\times 224 $(原因: 1. 每个batch需要同一维度，而训练集中有$ 217\times181 $和$ 181\times217 $两种尺寸；2. Unet中输入尺寸必须为$16$的倍数)，这导致*RicianNet*的训练输入中会额外添加$ 0 $边界填充，从而导致学习结果产生边缘伪影。
   解决方法: 对*RicianNet*不采用全图输入，而是采用**滑动窗口**或**随机裁剪**，既做到统一尺寸，又不影响模型效果。
 
 ------------
@@ -58,7 +58,7 @@ CONFIG = {
     "save_dir": "experiments"       # 实验结果统一保存路径
 }
 ```
-**结果**：在测试集上的表现：AdamW平均PSNR和SSIM均优于Adam. 在特殊测试中，AdamW的PSNR指标略差于Adam，但是SSIM指标优于Adam，降噪图片中明显保留了更多细节.
+**结果**: 在测试集上的表现: AdamW平均PSNR和SSIM均优于Adam. 在特殊测试中，AdamW的PSNR指标略差于Adam，但是SSIM指标优于Adam，降噪图片中明显保留了更多细节.
 
 >## 3. DnCNN Sliding AdamW
 ### 3.1 Stride=14
@@ -78,7 +78,7 @@ CONFIG = {
     "save_dir": "experiments"       # 实验结果统一保存路径
 }
 ```
-**结果**：在测试集表现最优（1-4），训练速度较慢。特殊测试中显著最优（1-4）。
+**结果**: 在测试集表现最优（1-4），训练速度较慢。特殊测试中显著最优（1-4）。
 
 ### 3.2 Stride = 32
 ```python
@@ -96,7 +96,7 @@ CONFIG = {
     "noise_range": (0, 0.3),    # Rician 噪声区间
     "data_dir": "data/processed/train", # 训练集路径
     "save_dir": "experiments",       # 实验结果统一保存路径
-    "resume_weight": None # 可选：预训练权重路径，若不使用预训练则设为 None
+    "resume_weight": None # 可选: 预训练权重路径，若不使用预训练则设为 None
 }
 ```
 
@@ -135,7 +135,7 @@ CONFIG = {
     "noise_range": (0, 0.3),    # Rician 噪声区间
     "data_dir": "data/processed/train", # 训练集路径
     "save_dir": "experiments",       # 实验结果统一保存路径
-    "resume_weight": "experiments\DnCNN_Random_Patch64_AdamW_20260303_073545\model_weights.pth" # 可选：预训练权重路径，若不使用预训练则设为 None
+    "resume_weight": "experiments\DnCNN_Random_Patch64_AdamW_20260303_073545\model_weights.pth" # 可选: 预训练权重路径，若不使用预训练则设为 None
 }
 ```
 **结果**: 性能对比第一轮显著提升，测试中PSNR追平baseline，SSIM略输于baseline。
@@ -155,7 +155,7 @@ CONFIG = {
     "noise_range": (0, 0.3),    # Rician 噪声区间
     "data_dir": "data/processed/train", # 训练集路径
     "save_dir": "experiments",       # 实验结果统一保存路径
-    "resume_weight": "experiments\DnCNN_Random_Patch64_AdamW_20260303_091959\model_weights.pth" # 可选：预训练权重路径，若不使用预训练则设为 None
+    "resume_weight": "experiments\DnCNN_Random_Patch64_AdamW_20260303_091959\model_weights.pth" # 可选: 预训练权重路径，若不使用预训练则设为 None
 }
 ```
 **结果**: 性能对比第二轮再次显著提升，测试中PSNR和SSIM均超越baseline。
@@ -219,7 +219,7 @@ CONFIG = {
     "noise_range": (0, 0.3),    # Rician 噪声区间
     "data_dir": "data/processed/train", # 训练集路径
     "save_dir": "experiments",       # 实验结果统一保存路径
-    "resume_weight": None # 可选：预训练权重路径，若不使用预训练则设为 None
+    "resume_weight": None # 可选: 预训练权重路径，若不使用预训练则设为 None
 }
 ```
 **结果**: PSNR和SSIM的值都不错，但是看残差图可以看出来明显的组织结构，该模型过度平滑了。
@@ -240,7 +240,7 @@ CONFIG = {
     "noise_range": (0, 0.3),    # Rician 噪声区间
     "data_dir": "data/processed/train", # 训练集路径
     "save_dir": "experiments",       # 实验结果统一保存路径
-    "resume_weight": None # 可选：预训练权重路径，若不使用预训练则设为 None
+    "resume_weight": None # 可选: 预训练权重路径，若不使用预训练则设为 None
 }
 ```
 **结果**: 效果很一般。
@@ -263,10 +263,10 @@ CONFIG = {
     "noise_range": (0, 0.3),    # Rician 噪声区间
     "data_dir": "data/processed/train", # 训练集路径
     "save_dir": "experiments",       # 实验结果统一保存路径
-    "resume_weight": None # 可选：预训练权重路径，若不使用预训练则设为 None
+    "resume_weight": None # 可选: 预训练权重路径，若不使用预训练则设为 None
 }
 ```
-**结果**：性能介于步长14和32的滑动窗口之间。
+**结果**: 性能介于步长14和32的滑动窗口之间。
 
 ------------
 # RicianNet试验记录
@@ -286,10 +286,10 @@ CONFIG = {
     "noise_range": (0, 0.3),    # Rician 噪声区间
     "data_dir": "data/processed/train", # 训练集路径
     "save_dir": "experiments",       # 实验结果统一保存路径
-    "resume_weight": None # 可选：预训练权重路径，若不使用预训练则设为 None
+    "resume_weight": None # 可选: 预训练权重路径，若不使用预训练则设为 None
 }
 ```
-**结果**：性能逼近步长14的滑动窗口，但测试图片中有样例边缘出现伪影。(处理：0 Pedding换为reflect padding；结果：无效)
+**结果**: 性能逼近步长14的滑动窗口，但测试图片中有样例边缘出现伪影。(处理: 0 Pedding换为reflect padding；结果: 无效)
 
 >## 2. reflect pedding
 ```python
@@ -307,10 +307,10 @@ CONFIG = {
     "noise_range": (0, 0.3),    # Rician 噪声区间
     "data_dir": "data/processed/train", # 训练集路径
     "save_dir": "experiments",       # 实验结果统一保存路径
-    "resume_weight": None # 可选：预训练权重路径，若不使用预训练则设为 None
+    "resume_weight": None # 可选: 预训练权重路径，若不使用预训练则设为 None
 }
 ```
-**结果**：四周反而多出白色伪影，效果很差。
+**结果**: 四周反而多出白色伪影，效果很差。
 
 >## 3. Clean data / zero padding
 ```python
@@ -328,7 +328,7 @@ CONFIG = {
     "noise_range": (0, 0.3),    # Rician 噪声区间
     "data_dir": "data/processed/train_valid", # 训练集路径
     "save_dir": "experiments",       # 实验结果统一保存路径
-    "resume_weight": None # 可选：预训练权重路径，若不使用预训练则设为 None
+    "resume_weight": None # 可选: 预训练权重路径，若不使用预训练则设为 None
 }
 ```
 **结果**: 结果不理想。
@@ -349,7 +349,7 @@ CONFIG = {
     "noise_range": (0, 0.3),    # Rician 噪声区间
     "data_dir": "data/processed/train", # 训练集路径
     "save_dir": "experiments",       # 实验结果统一保存路径
-    "resume_weight": None # 可选：预训练权重路径，若不使用预训练则设为 None
+    "resume_weight": None # 可选: 预训练权重路径，若不使用预训练则设为 None
 }
 ```
 **结果**: 性能与baseline持平，并且改善了伪影问题。
@@ -359,39 +359,59 @@ CONFIG = {
 >## 5. Random_patch64
 ```python
 CONFIG = {
-    "experiment_name": "RicianNet_random_Patch64_AdamW", # 实验名称，用于区分后续不同模型
+    "experiment_name": "RicianNet_random_Patch64", # 实验名称，用于区分后续不同模型
     "model_type": "RicianNet",
     "optimizer_type": "AdamW",  # 'Adam' 或 'AdamW'
     "dataset_mode": "random",       # 'random' (随机裁剪), 'sliding' (滑动窗口), 'full' (全图填充)
     "patch_size": 64,               # 裁剪大小
     "stride": 32,                    # 滑动窗口步长
-    "batch_size": 16,               # 8GB显存可轻松应对 64 或 128
+    "batch_size": 128,               # 显存最大占用4179.49
     "num_epochs": 100,               # 训练轮数
     "learning_rate": 1e-4,          # 初始学习率
     "weight_decay": 1e-4,
     "noise_range": (0, 0.3),    # Rician 噪声区间
     "data_dir": "data/processed/train", # 训练集路径
     "save_dir": "experiments",       # 实验结果统一保存路径
-    "resume_weight": None # 可选：预训练权重路径，若不使用预训练则设为 None
+    "resume_weight": None # 可选: 预训练权重路径，若不使用预训练则设为 None
 }
 ```
+```python
+CONFIG = {
+    "experiment_name": "RicianNet_random_Patch64_Epoch400", # 实验名称，用于区分后续不同模型
+    "model_type": "RicianNet",
+    "optimizer_type": "AdamW",  # 'Adam' 或 'AdamW'
+    "dataset_mode": "random",       # 'random' (随机裁剪), 'sliding' (滑动窗口), 'full' (全图填充)
+    "patch_size": 64,               # 裁剪大小
+    "stride": 32,                    # 滑动窗口步长
+    "batch_size": 128,               # 8GB显存可轻松应对 64 或 128
+    "num_epochs": 300,               # 训练轮数
+    "learning_rate": 1e-4,          # 初始学习率
+    "weight_decay": 1e-4,
+    "noise_range": (0, 0.3),    # Rician 噪声区间
+    "data_dir": "data/processed/train", # 训练集路径
+    "save_dir": "experiments",       # 实验结果统一保存路径
+    "resume_weight": "experiments\RicianNet_random_Patch64_20260309_100743\model_weights.pth" # 可选：预训练权重路径，若不使用预训练则设为 None
+}
+```
+**结果**: 100轮效果一般，但计算量小。再进行额外300轮训练，性能与patch128持平。
 
 >## 6. Sliding_patch64
 ```python
 CONFIG = {
-    "experiment_name": "RicianNet_random_Patch128_AdamW", # 实验名称，用于区分后续不同模型
+    "experiment_name": "RicianNet_sliding_Patch64", # 实验名称，用于区分后续不同模型
     "model_type": "RicianNet",
     "optimizer_type": "AdamW",  # 'Adam' 或 'AdamW'
-    "dataset_mode": "random",       # 'random' (随机裁剪), 'sliding' (滑动窗口), 'full' (全图填充)
+    "dataset_mode": "sliding",       # 'random' (随机裁剪), 'sliding' (滑动窗口), 'full' (全图填充)
     "patch_size": 64,               # 裁剪大小
     "stride": 32,                    # 滑动窗口步长
     "batch_size": 16,               # 8GB显存可轻松应对 64 或 128
-    "num_epochs": 100,               # 训练轮数
+    "num_epochs": 50,               # 训练轮数
     "learning_rate": 1e-4,          # 初始学习率
     "weight_decay": 1e-4,
     "noise_range": (0, 0.3),    # Rician 噪声区间
     "data_dir": "data/processed/train", # 训练集路径
     "save_dir": "experiments",       # 实验结果统一保存路径
-    "resume_weight": None # 可选：预训练权重路径，若不使用预训练则设为 None
+    "resume_weight": None # 可选: 预训练权重路径，若不使用预训练则设为 None
 }
 ```
+**结果**: 性能竟然不如全图和随机裁剪。
