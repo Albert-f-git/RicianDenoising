@@ -18,14 +18,13 @@ from models.RicianNet import RicianNet
 # 1. 核心实验配置区 (Centralized Configuration)
 # ==========================================
 CONFIG = {
-    "experiment_name": "RicianNet_sliding_Patch64", # 实验名称，用于区分后续不同模型
-    "model_type": "RicianNet",
+    "experiment_name": "DnCNN_Random_Patch41_Epoch3000", # 实验名称，用于区分后续不同模型
+    "model_type": "DnCNN",
     "optimizer_type": "AdamW",  # 'Adam' 或 'AdamW'
-    "dataset_mode": "sliding",       # 'random' (随机裁剪), 'sliding' (滑动窗口), 'full' (全图填充)
-    "patch_size": 64,               # 裁剪大小
-    "stride": 32,                    # 滑动窗口步长
-    "batch_size": 128,               # 8GB显存可轻松应对 64 或 128
-    "num_epochs": 50,               # 训练轮数
+    "dataset_mode": "random",       # 'random' (随机裁剪), 'sliding' (滑动窗口), 'full' (全图填充)
+    "patch_size": 41,               # 裁剪大小
+    "batch_size": 256,               # 显存最大占用
+    "num_epochs": 3000,               # 训练轮数
     "learning_rate": 1e-4,          # 初始学习率
     "weight_decay": 1e-4,
     "noise_range": (0, 0.3),    # Rician 噪声区间

@@ -27,6 +27,8 @@ CONFIG = {
     # "model_weights_path": "experiments\DnCNN_Random_Patch64_AdamW_20260303_073545\model_weights.pth", # DnCNN_Random_Patch64_AdamW_Epoch50
     # "model_weights_path": "experiments\DnCNN_Random_Patch64_AdamW_20260303_091959\model_weights.pth", # DnCNN_Random_Patch64_AdamW_Epoch200
     # "model_weights_path": "experiments\DnCNN_Random_Patch64_AdamW_20260303_095649\model_weights.pth", # DnCNN_Random_Patch64_AdamW_Epoch500
+    # "model_weights_path": "experiments\DnCNN_Random_Patch64_Epoch1500_20260310_123758\model_weights.pth", # DnCNN_Random_Patch64_Epoch1500
+    "model_weights_path": "experiments\DnCNN_Random_Patch41_Epoch3000_20260310_152419\model_weights.pth", # DnCNN_Random_Patch41_Epoch3000
     # "model_weights_path": "experiments\Unet_Baseline_AdamW_1e-4_20260305_125730\model_weights.pth", # Unet_AdamW_1e-4
     # "model_weights_path": "experiments\\Unet_Baseline_AdamW_1e-3_20260306_114041\model_weights.pth", # Unet_AdamW_1e-3
     # "model_weights_path": "experiments\\Unet_Sliding_Patch64_Stride14_AdamW_20260305_133805\model_weights.pth", # Unet_Sliding_Patch64_Stride14_AdamW
@@ -38,11 +40,11 @@ CONFIG = {
     # "model_weights_path": "experiments\RicianNet_random_Patch128_AdamW_20260307_203419\model_weights.pth", # RicianNet_random_Patch128
     # "model_weights_path": "experiments\RicianNet_random_Patch64_20260309_100743\model_weights.pth", # RicianNet_random_Patch64
     # "model_weights_path": "experiments\RicianNet_random_Patch64_Epoch400_20260309_104728\model_weights.pth", # RicianNet_random_Patch64_Epoch400
-    "model_weights_path": "experiments\RicianNet_sliding_Patch64_20260309_121904\model_weights.pth", # RicianNet_sliding_Patch64
+    # "model_weights_path": "experiments\RicianNet_sliding_Patch64_20260309_121904\model_weights.pth", # RicianNet_sliding_Patch64
     "dataset_mode": "full",                  # 使用全图零填充模式
     "noise_range": (sigma, sigma),             # 保持与训练一致的噪声水平
     "num_visualize": 5,                       # 测试结束后，画几张对比图来看看
-    "test_data_dir": "data/processed/test_valid", # 测试集路径
+    "test_data_dir": "data/processed/test", # 测试集路径
 }
 
 def calculate_metrics(clean, denoised):
