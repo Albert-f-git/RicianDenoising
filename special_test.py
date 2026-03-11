@@ -17,26 +17,16 @@ from models.RicianNet import RicianNet
 # ==========================================
 CONFIG = {
     "models": {
-        # "Adam_Baseline": "experiments\DnCNN_Baseline_Patch64_Adam_20260302_190727\model_weights.pth",
-        "DnCNN_Optimized": "experiments\DnCNN_Baseline_AdamW_20260302_200103\model_weights.pth",
-        "DnCNN_Random_Patch6_Epoch500": "experiments\DnCNN_Random_Patch64_AdamW_20260303_095649\model_weights.pth", # DnCNN_Random_Patch64_AdamW_Epoch500
-        "DnCNN_Random_Patch64_Epoch1500": "experiments\DnCNN_Random_Patch64_Epoch1500_20260310_123758\model_weights.pth", # DnCNN_Random_Patch64_Epoch1500
-        "DnCNN_Random_Patch41_Epoch3000": "experiments\DnCNN_Random_Patch41_Epoch3000_20260310_152419\model_weights.pth", # DnCNN_Random_Patch41_Epoch3000  
-        "DnCNN_Sliding_Patch64_Slide14": "experiments\DnCNN_Sliding_Patch64_Stride14_AdamW_20260302_230306\model_weights.pth", # DnCNN_Sliding_Patch64_Stride14_AdamW
-        "DnCNN_Sliding_Patch64_Slide32": "experiments\DnCNN_Sliding_Patch64_Stride32_AdamW_20260306_094004\model_weights.pth", # DnCNN_Sliding_Patch64_Stride32_AdamW
-        # "UNet_Baseline1e-4": "experiments\\Unet_Baseline_AdamW_1e-4_20260305_125730\model_weights.pth",
-        # "UNet_Baseline1e-3": "experiments\\Unet_Baseline_AdamW_1e-3_20260306_114041\model_weights.pth",
-        # "UNet_Sliding_Patch64_Slide14": "experiments\\Unet_Sliding_Patch64_Stride14_AdamW_20260305_133805\model_weights.pth",
-        # "UNet_Sliding_Patch64_Slide32": "experiments\\Unet_Sliding_Patch64_Stride32_AdamW_20260306_121908\model_weights.pth",
-        # "UNet_Random_Patch64": "experiments\\Unet_Random_Patch64_AdamW_20260306_135850\model_weights.pth", # Unet_Random_Patch64_AdamW_Epoch800
-        # "RicianNet_Baseline": "experiments\RicianNet_baseline_AdamW_20260306_161247\model_weights.pth", # RicianNet_baseline_AdamW
-        # "RicianNet_Padded_Reflect": "experiments\RicianNet_pedding_reflect_AdamW_20260306_210919\model_weights.pth", # RicianNet_pedding_reflect_AdamW
-        # "RicianNet_padding_zeros_cleaned": "experiments\RicianNet_padding_zeros_cleaned_AdamW_20260307_171156\model_weights.pth", # RicianNet_padding_zeros_cleaned_AdamW
-        # "RicianNet_Random_Patch128": "experiments\RicianNet_random_Patch128_AdamW_20260307_203419\model_weights.pth", # RicianNet_random_Patch128_AdamW_Epoch100
-        # "RicianNet_Random_Patch64": "experiments\RicianNet_random_Patch64_20260309_100743\model_weights.pth", # RicianNet_random_Patch64
-        # "RicianNet_Random_Patch64_Epoch400": "experiments\RicianNet_random_Patch64_Epoch400_20260309_104728\model_weights.pth", # RicianNet_random_Patch64_Epoch400
-        # "RicianNet_Sliding_Patch64_Stride32": "experiments\RicianNet_sliding_Patch64_20260309_121904\model_weights.pth", # RicianNet_sliding_Patch64
-    },
+        # "DnCNN_Optimized": "experiments\DnCNN_Baseline_AdamW_20260302_200103\model_weights.pth",
+        # "DnCNN_Random_Patch64_Epoch1500": "experiments\DnCNN_Random_Patch64_Epoch1500_20260310_123758\model_weights.pth", # DnCNN_Random_Patch64_Epoch1500
+        "DnCNN_Random_Patch41": "experiments\DnCNN_Random_Patch41_Epoch3000_20260310_152419\model_weights.pth", # DnCNN_Random_Patch41_Epoch3000  
+        "DnCNN_Random_Patch41_MSE_Warmup": "experiments\DnCNN_Random_Patch41_MSE_Warmup_Epoch3000_20260311_153329\model_weights_final.pth", # DnCNN_Random_Patch41_MSE_Warmup_Epoch3000
+        "DnCNN_Random_Patch41_MAE_NoWarmup": "experiments\DnCNN_Random_Patch41_MAE_NoWarmup_Epoch3000_20260311_180003\model_weights_final.pth", # DnCNN_Random_Patch41_MAE_NoWarmup_Epoch3000
+        # "DnCNN_Random_Patch41_MAE_Warmup_Epoch1500": "experiments\DnCNN_Random_Patch41_MAE_Warmup_Epoch1500_20260311_200344\model_weights_final.pth", # DnCNN_Random_Patch41_MAE_Warmup_Epoch1500
+        "DnCNN_Random_Patch41_MAE_Warmup": "experiments\DnCNN_Random_Patch41_MAE_Warmup_Epoch3000_20260311_212010\model_weights_final.pth", # DnCNN_Random_Patch41_MAE_Warmup_Epoch3000
+        # "DnCNN_Sliding_Patch64_Slide14": "experiments\DnCNN_Sliding_Patch64_Stride14_AdamW_20260302_230306\model_weights.pth", # DnCNN_Sliding_Patch64_Stride14_AdamW
+        # "DnCNN_Sliding_Patch64_Slide32": "experiments\DnCNN_Sliding_Patch64_Stride32_AdamW_20260306_094004\model_weights.pth", # DnCNN_Sliding_Patch64_Stride32_AdamW
+        },
     "images": [
         {"path": "data\special_test\\brain1_simulate.png", "type": "simulated"}, 
         {"path": "data\special_test\\brain2_simulate.png", "type": "simulated"},
@@ -53,7 +43,7 @@ CONFIG = {
     #     {"path": "data\special_test\\brain5_real.png", "type": "real"}
     # ],
     "noise_level": 0.10,          
-    "save_dir": "special_results\\DnCNN_comparison" 
+    "save_dir": "special_results\\Loss_warmup_comparison" 
 }
 
 def add_rician_noise(clean_img, sigma):
@@ -62,13 +52,21 @@ def add_rician_noise(clean_img, sigma):
     n2 = np.random.normal(0, sigma, clean_img.shape)
     return np.sqrt((clean_img + n1)**2 + n2**2)
 
-# ================= 新增：前景掩模生成 =================
-def get_foreground_mask(clean_img, threshold=0.05):
-    """根据干净图像生成前景（脑组织）掩模"""
-    mask = (clean_img > threshold).astype(np.uint8)
+# ================= 前景掩模生成 =================
+def get_foreground_mask(clean_img):
+    """使用 Otsu 算法全自动生成前景（脑组织）掩模"""
+    # 1. Otsu 算法需要 8-bit 图像 (0-255)，所以先将 [0,1] 的浮点图转换一下
+    img_8u = (clean_img * 255).astype(np.uint8)
+    
+    # 2. 调用 OpenCV 的 Otsu 自动阈值分割
+    # 返回的 ret_thresh 就是算法自动算出来的最佳阈值！
+    ret_thresh, mask_thresh = cv2.threshold(img_8u, 0, 1, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    
+    # 3. 形态学闭运算 (填平脑组织内部的暗带/空洞)
     kernel = np.ones((5, 5), np.uint8)
-    mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
-    return mask.astype(bool)
+    mask_closed = cv2.morphologyEx(mask_thresh, cv2.MORPH_CLOSE, kernel)
+    
+    return mask_closed.astype(bool)
 # ======================================================
 
 # ================= 更新：支持掩模的指标计算 =================

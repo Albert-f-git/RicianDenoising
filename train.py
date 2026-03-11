@@ -4,6 +4,7 @@ import json
 import torch
 import torch.nn as nn
 import torch.optim as optim
+from pytorch_msssim import ssim
 from torch.utils.data import DataLoader
 import matplotlib.pyplot as plt
 from tqdm import tqdm
@@ -23,7 +24,7 @@ CONFIG = {
     "optimizer_type": "AdamW",  # 'Adam' 或 'AdamW'
     "dataset_mode": "random",       # 'random' (随机裁剪), 'sliding' (滑动窗口), 'full' (全图填充)
     "patch_size": 41,               # 裁剪大小
-    "batch_size": 256,               # 显存最大占用
+    "batch_size": 256,               # 显存最大占用3517.69
     "num_epochs": 3000,               # 训练轮数
     "learning_rate": 1e-4,          # 初始学习率
     "weight_decay": 1e-4,

@@ -19,28 +19,15 @@ from models.RicianNet import RicianNet
 # ==========================================
 sigma = 0.1  # 固定噪声水平，保持与训练一致
 CONFIG = {
-    # ⚠️ 替换为具体权重路径 (比如 experiments/DnCNN_Baseline_Adam_2026xxxx_xxxx/model_weights.pth)
-    # "model_weights_path": "experiments\DnCNN_Baseline_Adam_20260302_190727\model_weights.pth", # DnCNN_Adam
     # "model_weights_path": "experiments\DnCNN_Baseline_AdamW_20260302_200103\model_weights.pth", # DnCNN_AdamW
     # "model_weights_path": "experiments\DnCNN_Sliding_Patch64_Stride14_AdamW_20260302_230306\model_weights.pth", # DnCNN_Sliding_Patch64_Stride14_AdamW
     # "model_weights_path": "experiments\DnCNN_Sliding_Patch64_Stride32_AdamW_20260306_094004\model_weights.pth", # DnCNN_Sliding_Patch64_Stride32_AdamW
-    # "model_weights_path": "experiments\DnCNN_Random_Patch64_AdamW_20260303_073545\model_weights.pth", # DnCNN_Random_Patch64_AdamW_Epoch50
-    # "model_weights_path": "experiments\DnCNN_Random_Patch64_AdamW_20260303_091959\model_weights.pth", # DnCNN_Random_Patch64_AdamW_Epoch200
-    # "model_weights_path": "experiments\DnCNN_Random_Patch64_AdamW_20260303_095649\model_weights.pth", # DnCNN_Random_Patch64_AdamW_Epoch500
     # "model_weights_path": "experiments\DnCNN_Random_Patch64_Epoch1500_20260310_123758\model_weights.pth", # DnCNN_Random_Patch64_Epoch1500
-    "model_weights_path": "experiments\DnCNN_Random_Patch41_Epoch3000_20260310_152419\model_weights.pth", # DnCNN_Random_Patch41_Epoch3000
-    # "model_weights_path": "experiments\Unet_Baseline_AdamW_1e-4_20260305_125730\model_weights.pth", # Unet_AdamW_1e-4
-    # "model_weights_path": "experiments\\Unet_Baseline_AdamW_1e-3_20260306_114041\model_weights.pth", # Unet_AdamW_1e-3
-    # "model_weights_path": "experiments\\Unet_Sliding_Patch64_Stride14_AdamW_20260305_133805\model_weights.pth", # Unet_Sliding_Patch64_Stride14_AdamW
-    # "model_weights_path": "experiments\\Unet_Sliding_Patch64_Stride32_AdamW_20260306_121908\model_weights.pth", # Unet_Sliding_Patch64_Stride32_AdamW
-    # "model_weights_path": "experiments\\Unet_Random_Patch64_AdamW_20260306_135850\model_weights.pth", # Unet_Random_Patch64_AdamW_Epoch800
-    # "model_weights_path": "experiments\RicianNet_baseline_AdamW_20260306_161247\model_weights.pth", # RicianNet_baseline_AdamW
-    # "model_weights_path": "experiments\RicianNet_pedding_reflect_AdamW_20260306_210919\model_weights.pth", # RicianNet_pedding_reflect_AdamW    
-    # "model_weights_path": "experiments\RicianNet_padding_zeros_cleaned_AdamW_20260307_171156\model_weights.pth", # RicianNet_padding_zeros_cleaned_AdamW
-    # "model_weights_path": "experiments\RicianNet_random_Patch128_AdamW_20260307_203419\model_weights.pth", # RicianNet_random_Patch128
-    # "model_weights_path": "experiments\RicianNet_random_Patch64_20260309_100743\model_weights.pth", # RicianNet_random_Patch64
-    # "model_weights_path": "experiments\RicianNet_random_Patch64_Epoch400_20260309_104728\model_weights.pth", # RicianNet_random_Patch64_Epoch400
-    # "model_weights_path": "experiments\RicianNet_sliding_Patch64_20260309_121904\model_weights.pth", # RicianNet_sliding_Patch64
+    # "model_weights_path": "experiments\DnCNN_Random_Patch41_Epoch3000_20260310_152419\model_weights.pth", # DnCNN_Random_Patch41_Epoch3000
+    # "model_weights_path": "experiments\DnCNN_Random_Patch41_MSE_Warmup_Epoch3000_20260311_153329\model_weights_final.pth", # DnCNN_Random_Patch41_MSE_Warmup_Epoch3000
+    # "model_weights_path": "experiments\DnCNN_Random_Patch41_MAE_NoWarmup_Epoch3000_20260311_180003\model_weights_final.pth", # DnCNN_Random_Patch41_MAE_NoWarmup_Epoch3000
+    "model_weights_path": "experiments\DnCNN_Random_Patch41_MAE_Warmup_Epoch1500_20260311_200344\model_weights_final.pth", # DnCNN_Random_Patch41_MAE_Warmup_Epoch1500  
+    "model_weights_path": "experiments\DnCNN_Random_Patch41_MAE_Warmup_Epoch3000_20260311_212010\model_weights_final.pth", # DnCNN_Random_Patch41_MAE_Warmup_Epoch3000
     "dataset_mode": "full",                  # 使用全图零填充模式
     "noise_range": (sigma, sigma),             # 保持与训练一致的噪声水平
     "num_visualize": 5,                       # 测试结束后，画几张对比图来看看
