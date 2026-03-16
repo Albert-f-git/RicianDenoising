@@ -19,15 +19,7 @@ from models.RicianNet import RicianNet
 # ==========================================
 sigma = 0.1  # 固定噪声水平，保持与训练一致
 CONFIG = {
-    # "model_weights_path": "experiments\DnCNN_Baseline_AdamW_20260302_200103\model_weights.pth", # DnCNN_AdamW
-    # "model_weights_path": "experiments\DnCNN_Sliding_Patch64_Stride14_AdamW_20260302_230306\model_weights.pth", # DnCNN_Sliding_Patch64_Stride14_AdamW
-    # "model_weights_path": "experiments\DnCNN_Sliding_Patch64_Stride32_AdamW_20260306_094004\model_weights.pth", # DnCNN_Sliding_Patch64_Stride32_AdamW
-    # "model_weights_path": "experiments\DnCNN_Random_Patch64_Epoch1500_20260310_123758\model_weights.pth", # DnCNN_Random_Patch64_Epoch1500
-    # "model_weights_path": "experiments\DnCNN_Random_Patch41_Epoch3000_20260310_152419\model_weights.pth", # DnCNN_Random_Patch41_Epoch3000
-    # "model_weights_path": "experiments\DnCNN_Random_Patch41_MSE_Warmup_Epoch3000_20260311_153329\model_weights_final.pth", # DnCNN_Random_Patch41_MSE_Warmup_Epoch3000
-    # "model_weights_path": "experiments\DnCNN_Random_Patch41_MAE_NoWarmup_Epoch3000_20260311_180003\model_weights_final.pth", # DnCNN_Random_Patch41_MAE_NoWarmup_Epoch3000
-    "model_weights_path": "experiments\DnCNN_Random_Patch41_MAE_Warmup_Epoch1500_20260311_200344\model_weights_final.pth", # DnCNN_Random_Patch41_MAE_Warmup_Epoch1500  
-    "model_weights_path": "experiments\DnCNN_Random_Patch41_MAE_Warmup_Epoch3000_20260311_212010\model_weights_final.pth", # DnCNN_Random_Patch41_MAE_Warmup_Epoch3000
+    "model_weights_path": "experiments\\Unet_Attention_Random_Patch128_SSIMLoss_20260316_212839\model_weights_final.pth", # Unet_Attention_Random_Patch128_SSIMLoss_epoch1000
     "dataset_mode": "full",                  # 使用全图零填充模式
     "noise_range": (sigma, sigma),             # 保持与训练一致的噪声水平
     "num_visualize": 5,                       # 测试结束后，画几张对比图来看看

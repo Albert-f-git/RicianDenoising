@@ -9,30 +9,34 @@ from torch.utils.data import DataLoader
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 from datetime import datetime
+from pytorch_msssim import ssim
 
 # 导入你写的模块
 from data.dataset import MRIDenoisingDataset
 from models.dncnn import DnCNN
-
+from models.unet import UNet
 # ==========================================
 # 1. 核心实验配置区 (消融实验控制台)
 # ==========================================
 CONFIG = {
-    "experiment_name": "DnCNN_Random_Patch41_MAE_Warmup_Epoch3000", 
-    "model_type": "DnCNN",
-    "optimizer_type": "AdamW",
+    "experiment_name": "Unet_Attention_Random_Patch128_SSIMLoss", # 实验名称，用于区分后续不同模型
+    "model_type": "UNet",
+    "optimizer_type": "AdamW",  # 'Adam' 或 'AdamW'
     "dataset_mode": "random",       # 'random' (随机裁剪), 'sliding' (滑动窗口), 'full' (全图填充)
-    "patch_size": 41,               # 窗口大小
-    "batch_size": 256,              # 显存最大占用
-    "num_epochs": 3000,             # 训练轮数
+    "patch_size": 128,               # 裁剪大小
+    "stride": 32,                    # 滑动窗口步长
+    "batch_size": 64,               # 显存最大占用
+    "num_epochs": 1000,               # 训练轮数
     "learning_rate": 1e-4,          # 初始学习率
     "weight_decay": 1e-4,
-    "noise_range": (0, 0.3),        # Rician 噪声区间
-    "use_warmup": True,
-    "data_dir": "data/processed/train", 
-    "save_dir": "experiments",       
-    "resume_weight": "experiments\DnCNN_Random_Patch41_MAE_Warmup_Epoch1500_20260311_200344\latest_checkpoint.pth",           
+    "noise_range": (0, 0.3),    # Rician 噪声区间
+    "use_warmup": False,          # 是否使用热重启 (OneCycleLR)
+    "data_dir": "data/processed/train", # 训练集路径
+    "save_dir": "experiments",       # 实验结果统一保存路径
+    "resume_weight": None, # 可选: 预训练权重路径，若不使用预训练则设为 None
+    "use_attention": True # 是否使用注意力机制
 }
+
 
 def train():
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -63,8 +67,14 @@ def train():
     train_loader = DataLoader(train_dataset, batch_size=CONFIG["batch_size"], shuffle=True, num_workers=0)
 
     # 模型与优化器
-    model = DnCNN().to(device)
-    criterion = nn.L1Loss() 
+    if CONFIG["model_type"] == "DnCNN":
+        model = DnCNN().to(device)
+    elif CONFIG["model_type"] == "UNet":
+        use_attention = CONFIG.get("use_attention", True)
+        model = UNet(in_channels=1, out_channels=1, use_attention=use_attention).to(device)
+    else:
+        raise ValueError(f"未知的模型类型: {CONFIG['model_type']}")
+    criterion_l1 = nn.L1Loss() 
     optimizer = optim.AdamW(model.parameters(), lr=CONFIG["learning_rate"], weight_decay=CONFIG["weight_decay"])
 
     # ==========================================
@@ -95,7 +105,7 @@ def train():
     remaining_epochs = CONFIG["num_epochs"] - start_epoch
     
     if CONFIG["use_warmup"] and remaining_epochs > 0:
-        print(f"🌟 触发热重启 (Warm Restart)！将为接下来的 {remaining_epochs} 轮创建新调度曲线。")
+        print(f"触发热重启 (Warm Restart)！将为接下来的 {remaining_epochs} 轮创建新调度曲线。")
         scheduler = OneCycleLR(
             optimizer, 
             max_lr=CONFIG["learning_rate"], 
@@ -127,7 +137,19 @@ def train():
                 
                 optimizer.zero_grad()
                 denoised_imgs = model(noisy_imgs)
-                loss = criterion(denoised_imgs, clean_imgs)
+                
+                # 1. 计算纯像素误差 (L1)
+                loss_l1 = criterion_l1(denoised_imgs, clean_imgs)
+                
+                # 2. 计算结构相似度误差 (SSIM Loss)
+                # data_range=1.0 是因为图像像素在 [0,1] 之间
+                # ssim 返回的是相似度(越大越好)，所以 Loss 是 (1 - ssim)
+                loss_ssim = 1.0 - ssim(denoised_imgs, clean_imgs, data_range=1.0, size_average=True)
+                
+                # 3. L1 与 SSIM 融合比例 (0.84 : 0.16)
+                loss = 0.84 * loss_l1 + 0.16 * loss_ssim
+                # =========================================================
+
                 loss.backward()
                 optimizer.step()
                 

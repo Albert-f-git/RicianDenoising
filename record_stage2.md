@@ -1,5 +1,10 @@
 本阶段试验在DnCNN的基础上进行调整尝试.
 # 问题与解决
+## 1. 前景掩膜(foreground mask)
+之前的前景掩膜算法简单但效果差，尤其是在T1高对比度的情况下。
+![Old Foreground Mask](data\record\batch_mask_test_result_1.png)
+修改后的算法略微复杂但能计算出比较完美的前景。
+![New Foreground Mask](data\record\batch_mask_test_result.png)
 
 
 
@@ -42,7 +47,7 @@ CONFIG = {
     "save_dir": "experiments"       # 实验结果统一保存路径
 }
 ```
-**结果**: 在测试集表现最优（1-4），训练速度较慢。特殊测试中显著最优（1-4）。
+**结果**: 在测试集表现最优，训练速度较慢。特殊测试中显著最优。
 
 ### 2.2 Stride = 32
 ```python
@@ -145,7 +150,8 @@ CONFIG = {
     "resume_weight": None           
 }
 ```
-**结果**: 整体不如MSE
+**结果**: 在前景掩膜下效果最优。
+
 ## patch41, epoch1500, MAE, Warmup
 ```python
 CONFIG = {
@@ -165,6 +171,7 @@ CONFIG = {
     "resume_weight": None           
 }
 ```
+**结果**: 性能比patch64,epoch1500略强。
 
 ## patch41, epoch3000, MAE, Warmup
 ```python
@@ -185,4 +192,181 @@ CONFIG = {
     "resume_weight": "experiments\DnCNN_Random_Patch41_MAE_Warmup_Epoch1500_20260311_200344\latest_checkpoint.pth",           
 }
 ```
-**结果**: 结果优于其它`patch=41`的随机裁剪，显著改善了MAE NoWarmup 低SSIM的劣势。
+**结果**: 显著改善了MAE NoWarmup 低SSIM的劣势，但是去噪效果较弱。
+
+## patch41, epoch3000, SSIMLOSS
+```python
+CONFIG = {
+    "experiment_name": "DnCNN_Random_Patch41_SSIMLOSS", 
+    "model_type": "DnCNN",
+    "optimizer_type": "AdamW",
+    "dataset_mode": "random",       # 'random' (随机裁剪), 'sliding' (滑动窗口), 'full' (全图填充)
+    "patch_size": 41,               # 窗口大小
+    "batch_size": 256,              # 显存最大占用3516.05
+    "num_epochs": 3000,             # 训练轮数
+    "learning_rate": 1e-4,          # 初始学习率
+    "weight_decay": 1e-4,
+    "noise_range": (0, 0.3),        # Rician 噪声区间
+    "use_warmup": False,
+    "data_dir": "data/processed/train", 
+    "save_dir": "experiments",       
+    "resume_weight": None,           
+}
+```
+
+# U-net试验记录
+## 全图，SSIMLoss
+```python
+CONFIG = {
+    "experiment_name": "Unet_SSIMLoss",
+    "model_type": "UNet",
+    "optimizer_type": "AdamW",
+    "dataset_mode": "full",
+    "patch_size": 64,           # 裁剪大小
+    "batch_size": 32,           # 显存最大占用4509.67
+    "num_epochs": 50,           # 训练轮次
+    "learning_rate": 1e-4,      # 学习率
+    "weight_decay": 1e-4,
+    "noise_range": (0, 0.3),    # Rician 噪声区间
+    "data_dir": "data/processed/train",     # 训练集路径
+    "save_dir": "experiments",      # 实验结果统一保存路径
+    "resume_weight": None
+    }
+```
+**结果**: 效果一般。
+
+## 全图，SSIMLoss, epoch150
+```python
+CONFIG = {
+    "experiment_name": "Unet_SSIMLoss_epoch150",
+    "model_type": "UNet",
+    "optimizer_type": "AdamW",
+    "dataset_mode": "full",
+    "patch_size": 64,           # 裁剪大小
+    "batch_size": 32,           # 显存最大占用
+    "num_epochs": 150,           # 训练轮次
+    "learning_rate": 1e-4,      # 学习率
+    "weight_decay": 1e-4,
+    "noise_range": (0, 0.3),    # Rician 噪声区间
+    "use_warmup": False,         # 是否启用热重启 (Warm Restart)
+    "data_dir": "data/processed/train",     # 训练集路径
+    "save_dir": "experiments",      # 实验结果统一保存路径
+    "resume_weight": None
+    }
+```
+**结果**: 优于50轮训练
+
+## Sliding, patch64, stride14, SSIMLoss
+```python
+CONFIG = {
+    "experiment_name": "Unet_Sliding_Patch64_Stride14_SSIMLoss", # 实验名称，用于区分后续不同模型
+    "model_type": "UNet",
+    "optimizer_type": "AdamW",  # 'Adam' 或 'AdamW'
+    "dataset_mode": "sliding",       # 'random' (随机裁剪), 'sliding' (滑动窗口), 'full' (全图填充)
+    "patch_size": 64,               # 裁剪大小
+    "batch_size": 256,               # 显存最大占用5860.42
+    "num_epochs": 50,               # 训练轮数
+    "learning_rate": 1e-4,          # 初始学习率
+    "weight_decay": 1e-4,
+    "noise_range": (0, 0.3),    # Rician 噪声区间
+    "use_warmup": False,          # 是否使用热重启 (OneCycleLR)
+    "data_dir": "data/processed/train", # 训练集路径
+    "save_dir": "experiments",       # 实验结果统一保存路径
+    "resume_weight": None # 可选: 预训练权重路径，若不使用预训练则设为 None
+}
+```
+**结果**: 相较于MSE Loss，性能略微提升。
+
+---------------------------------------------------------------------------------------------------------------------------
+
+## Random, patch64, SSIMLoss，epoch800/1500
+```python
+CONFIG = {
+    "experiment_name": "Unet_Random_Patch64_SSIMLoss", # 实验名称，用于区分后续不同模型
+    "model_type": "UNet",
+    "optimizer_type": "AdamW",  # 'Adam' 或 'AdamW'
+    "dataset_mode": "random",       # 'random' (随机裁剪), 'sliding' (滑动窗口), 'full' (全图填充)
+    "patch_size": 64,               # 裁剪大小
+    "stride": 32,                    # 滑动窗口步长
+    "batch_size": 512,               # 显存最大占用5850.3
+    "num_epochs": 800,               # 训练轮数
+    "learning_rate": 1e-4,          # 初始学习率
+    "weight_decay": 1e-4,
+    "noise_range": (0, 0.3),    # Rician 噪声区间
+    "use_warmup": False,          # 是否使用热重启 (OneCycleLR)
+    "data_dir": "data/processed/train", # 训练集路径
+    "save_dir": "experiments",       # 实验结果统一保存路径
+    "resume_weight": None # 可选: 预训练权重路径，若不使用预训练则设为 None
+}
+```
+**结果**: 相较于MSE Loss, 在SSIM指标上有提升；epoch1500模型的性能再次提升。
+
+
+## Random, patch128, SSIMLoss, epoch1000
+```python
+CONFIG = {
+    "experiment_name": "Unet_Random_Patch128_SSIMLoss", # 实验名称，用于区分后续不同模型
+    "model_type": "UNet",
+    "optimizer_type": "AdamW",  # 'Adam' 或 'AdamW'
+    "dataset_mode": "random",       # 'random' (随机裁剪), 'sliding' (滑动窗口), 'full' (全图填充)
+    "patch_size": 128,               # 裁剪大小
+    "stride": 32,                    # 滑动窗口步长
+    "batch_size": 128,               # 显存最大占用5850.3
+    "num_epochs": 1000,               # 训练轮数
+    "learning_rate": 1e-4,          # 初始学习率
+    "weight_decay": 1e-4,
+    "noise_range": (0, 0.3),    # Rician 噪声区间
+    "use_warmup": False,          # 是否使用热重启 (OneCycleLR)
+    "data_dir": "data/processed/train", # 训练集路径
+    "save_dir": "experiments",       # 实验结果统一保存路径
+    "resume_weight": None # 可选: 预训练权重路径，若不使用预训练则设为 None
+}
+```
+**结果**: 性能接近14步长64窗口的滑动窗口模型。
+
+# UNet with Attention
+## Random, patch64, SSIMLoss, epoch1500
+```python
+CONFIG = {
+    "experiment_name": "Unet_Attention_Random_Patch64_SSIMLoss", # 实验名称，用于区分后续不同模型
+    "model_type": "UNet",
+    "optimizer_type": "AdamW",  # 'Adam' 或 'AdamW'
+    "dataset_mode": "random",       # 'random' (随机裁剪), 'sliding' (滑动窗口), 'full' (全图填充)
+    "patch_size": 64,               # 裁剪大小
+    "stride": 32,                    # 滑动窗口步长
+    "batch_size": 256,               # 显存最大占用
+    "num_epochs": 1500,               # 训练轮数
+    "learning_rate": 1e-4,          # 初始学习率
+    "weight_decay": 1e-4,
+    "noise_range": (0, 0.3),    # Rician 噪声区间
+    "use_warmup": False,          # 是否使用热重启 (OneCycleLR)
+    "data_dir": "data/processed/train", # 训练集路径
+    "save_dir": "experiments",       # 实验结果统一保存路径
+    "resume_weight": None, # 可选: 预训练权重路径，若不使用预训练则设为 None
+    "use_attention": True # 是否使用注意力机制
+}
+```
+**结果**: 性能略优于No Attention模型。
+
+## Sliding, patch128, SSIMLoss, epoch1000
+```python
+CONFIG = {
+    "experiment_name": "Unet_Attention_Random_Patch128_SSIMLoss", # 实验名称，用于区分后续不同模型
+    "model_type": "UNet",
+    "optimizer_type": "AdamW",  # 'Adam' 或 'AdamW'
+    "dataset_mode": "random",       # 'random' (随机裁剪), 'sliding' (滑动窗口), 'full' (全图填充)
+    "patch_size": 128,               # 裁剪大小
+    "stride": 32,                    # 滑动窗口步长
+    "batch_size": 128,               # 显存最大占用
+    "num_epochs": 1000,               # 训练轮数
+    "learning_rate": 1e-4,          # 初始学习率
+    "weight_decay": 1e-4,
+    "noise_range": (0, 0.3),    # Rician 噪声区间
+    "use_warmup": False,          # 是否使用热重启 (OneCycleLR)
+    "data_dir": "data/processed/train", # 训练集路径
+    "save_dir": "experiments",       # 实验结果统一保存路径
+    "resume_weight": None, # 可选: 预训练权重路径，若不使用预训练则设为 None
+    "use_attention": True # 是否使用注意力机制
+}
+```
+**结果**: SSIM指标大幅提升。

@@ -19,13 +19,25 @@ CONFIG = {
     "models": {
         # "DnCNN_Optimized": "experiments\DnCNN_Baseline_AdamW_20260302_200103\model_weights.pth",
         # "DnCNN_Random_Patch64_Epoch1500": "experiments\DnCNN_Random_Patch64_Epoch1500_20260310_123758\model_weights.pth", # DnCNN_Random_Patch64_Epoch1500
-        "DnCNN_Random_Patch41": "experiments\DnCNN_Random_Patch41_Epoch3000_20260310_152419\model_weights.pth", # DnCNN_Random_Patch41_Epoch3000  
-        "DnCNN_Random_Patch41_MSE_Warmup": "experiments\DnCNN_Random_Patch41_MSE_Warmup_Epoch3000_20260311_153329\model_weights_final.pth", # DnCNN_Random_Patch41_MSE_Warmup_Epoch3000
-        "DnCNN_Random_Patch41_MAE_NoWarmup": "experiments\DnCNN_Random_Patch41_MAE_NoWarmup_Epoch3000_20260311_180003\model_weights_final.pth", # DnCNN_Random_Patch41_MAE_NoWarmup_Epoch3000
+        # "DnCNN_Random_Patch41": "experiments\DnCNN_Random_Patch41_Epoch3000_20260310_152419\model_weights.pth", # DnCNN_Random_Patch41_Epoch3000  
+        # "DnCNN_Random_Patch41_MSE_Warmup": "experiments\DnCNN_Random_Patch41_MSE_Warmup_Epoch3000_20260311_153329\model_weights_final.pth", # DnCNN_Random_Patch41_MSE_Warmup_Epoch3000
+        # "DnCNN_Random_Patch41_MAE_NoWarmup": "experiments\DnCNN_Random_Patch41_MAE_NoWarmup_Epoch3000_20260311_180003\model_weights_final.pth", # DnCNN_Random_Patch41_MAE_NoWarmup_Epoch3000
         # "DnCNN_Random_Patch41_MAE_Warmup_Epoch1500": "experiments\DnCNN_Random_Patch41_MAE_Warmup_Epoch1500_20260311_200344\model_weights_final.pth", # DnCNN_Random_Patch41_MAE_Warmup_Epoch1500
-        "DnCNN_Random_Patch41_MAE_Warmup": "experiments\DnCNN_Random_Patch41_MAE_Warmup_Epoch3000_20260311_212010\model_weights_final.pth", # DnCNN_Random_Patch41_MAE_Warmup_Epoch3000
+        # "DnCNN_Random_Patch41_MAE_Warmup": "experiments\DnCNN_Random_Patch41_MAE_Warmup_Epoch3000_20260311_212010\model_weights_final.pth", # DnCNN_Random_Patch41_MAE_Warmup_Epoch3000
+        # "DnCNN_Random_Patch41_SSIMLOSS": "experiments\DnCNN_Random_Patch41_SSIMLOSS_20260312_150403\model_weights_final.pth", # DnCNN_Random_Patch41_SSIMLOSS_Epoch3000
         # "DnCNN_Sliding_Patch64_Slide14": "experiments\DnCNN_Sliding_Patch64_Stride14_AdamW_20260302_230306\model_weights.pth", # DnCNN_Sliding_Patch64_Stride14_AdamW
         # "DnCNN_Sliding_Patch64_Slide32": "experiments\DnCNN_Sliding_Patch64_Stride32_AdamW_20260306_094004\model_weights.pth", # DnCNN_Sliding_Patch64_Stride32_AdamW
+        # "UNet_baseline": "experiments\\Unet_Baseline_AdamW_1e-4_20260305_125730\model_weights.pth", # Unet_Baseline
+        # "UNet_SSIMLoss": "experiments\\Unet_SSIMLoss_20260312_182138\model_weights_final.pth", # Unet_SSIMLoss
+        # "UNet_SSIMLoss_epoch150": "experiments\\Unet_SSIMLoss_epoch150_20260313_173033\model_weights_final.pth", # Unet_SSIMLoss_epoch150
+        # "UNet_Sliding_Patch64_Slide14": "experiments\\Unet_Sliding_Patch64_Stride14_AdamW_20260305_133805\model_weights.pth", # Unet_Sliding_Patch64_Stride14_AdamW
+        "UNet_Sliding_Patch64_Slide14": "experiments\\Unet_Sliding_Patch64_Stride14_SSIMLoss_20260312_195618\model_weights_final.pth", # Unet_Sliding_Patch64_Stride14_SSIMLoss
+        # "UNet_Random_Patch64": "experiments\\Unet_Random_Patch64_AdamW_20260306_135850\model_weights.pth", # Unet_Random_Patch64
+        # "UNet_Random_Patch64_SSIMLoss": "experiments\\Unet_Random_Patch64_SSIMLoss_20260313_123947\model_weights_final.pth", # Unet_Random_Patch64_SSIMLoss
+        "UNet_Random_Patch64_epoch1500": "experiments\\Unet_Random_Patch64_SSIMLoss_epoch1500_20260313_153944\model_weights_final.pth", # Unet_Random_Patch64_SSIMLoss_epoch1500
+        "UNet_Attention_Random_Patch64_epoch1500": "experiments\\Unet_Attention_Random_Patch64_SSIMLoss_20260316_182600\model_weights_final.pth", # Unet_Attention_Random_Patch64_SSIMLoss_epoch1500
+        "UNet_Random_Patch128_epoch1000": "experiments\\Unet_Random_Patch128_SSIMLoss_20260313_181510\model_weights_final.pth", # Unet_Random_Patch128_SSIMLoss_epoch1000
+        "UNet_Attention_Random_Patch128_epoch1000": "experiments\\Unet_Attention_Random_Patch128_SSIMLoss_20260316_212839\model_weights_final.pth", # Unet_Attention_Random_Patch128_SSIMLoss_epoch1000
         },
     "images": [
         {"path": "data\special_test\\brain1_simulate.png", "type": "simulated"}, 
@@ -43,7 +55,7 @@ CONFIG = {
     #     {"path": "data\special_test\\brain5_real.png", "type": "real"}
     # ],
     "noise_level": 0.10,          
-    "save_dir": "special_results\\Loss_warmup_comparison" 
+    "save_dir": "special_results\\UNet_Random_SSIMLoss_comparison", 
 }
 
 def add_rician_noise(clean_img, sigma):
@@ -54,19 +66,60 @@ def add_rician_noise(clean_img, sigma):
 
 # ================= 前景掩模生成 =================
 def get_foreground_mask(clean_img):
-    """使用 Otsu 算法全自动生成前景（脑组织）掩模"""
-    # 1. Otsu 算法需要 8-bit 图像 (0-255)，所以先将 [0,1] 的浮点图转换一下
+    """使用 面积过滤 + 椭圆闭运算 打造绝对纯净的头部掩模"""
+    # 1. 基础二值化
     img_8u = (clean_img * 255).astype(np.uint8)
+    _, mask_thresh = cv2.threshold(img_8u, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
     
-    # 2. 调用 OpenCV 的 Otsu 自动阈值分割
-    # 返回的 ret_thresh 就是算法自动算出来的最佳阈值！
-    ret_thresh, mask_thresh = cv2.threshold(img_8u, 0, 1, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    # ========================================================
+    # 面积过滤器
+    # ========================================================
+    # 找出二值化图中的所有独立岛屿
+    contours_raw, _ = cv2.findContours(mask_thresh, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
     
-    # 3. 形态学闭运算 (填平脑组织内部的暗带/空洞)
-    kernel = np.ones((5, 5), np.uint8)
-    mask_closed = cv2.morphologyEx(mask_thresh, cv2.MORPH_CLOSE, kernel)
+    if not contours_raw:
+        return np.zeros_like(clean_img, dtype=bool)
+        
+    # 计算最大岛屿（大脑主体）的面积
+    max_area = max([cv2.contourArea(c) for c in contours_raw])
+    mask_clean = np.zeros_like(mask_thresh)
     
-    return mask_closed.astype(bool)
+    # 遍历所有岛屿，只保留面积大于大脑 1% 的部分（头皮会保留，离散鬼影会被直接抛弃）
+    for c in contours_raw:
+        if cv2.contourArea(c) > max_area * 0.01:
+            # thickness=-1 会顺便把内部的孔洞（如脑室）提前填实
+            cv2.drawContours(mask_clean, [c], -1, 255, thickness=-1)
+            
+    # ========================================================
+
+    # 2. 护城河填充 (Padding)
+    pad = 30
+    mask_padded = cv2.copyMakeBorder(mask_clean, pad, pad, pad, pad, cv2.BORDER_CONSTANT, value=0)
+    
+    # ========================================================
+    # 解剖学椭圆包裹 (拒绝方形核的对角线越界)
+    # ========================================================
+    # 使用 17x17 的椭圆核，完美缝合头皮间隙，且绝对平滑
+    kernel_bridge = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (17, 17))
+    mask_bridged = cv2.morphologyEx(mask_padded, cv2.MORPH_CLOSE, kernel_bridge)
+    # ========================================================
+
+    # 3. 寻找最外围轮廓 (保鲜膜打包)
+    contours_ext, _ = cv2.findContours(mask_bridged, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    
+    if not contours_ext:
+        return np.zeros_like(clean_img, dtype=bool)
+        
+    # 4. 提取并填实最外围最大轮廓
+    largest_contour = max(contours_ext, key=cv2.contourArea)
+    mask_filled_padded = np.zeros_like(mask_padded)
+    cv2.drawContours(mask_filled_padded, [largest_contour], -1, 255, thickness=-1)
+    
+    # 5. 裁掉黑边，恢复原状
+    h, w = mask_thresh.shape
+    mask_final = mask_filled_padded[pad : pad+h, pad : pad+w]
+    
+    return (mask_final > 0).astype(bool)
 # ======================================================
 
 # ================= 更新：支持掩模的指标计算 =================
@@ -99,16 +152,19 @@ def multi_model_inference(sigma):
             continue
             
         if "UNet" in model_name:
-            model = UNet(in_channels=1, out_channels=1).to(device)
+            # 根据模型名称判断是否使用注意力机制
+            use_attention = "Attention" in model_name
+            model = UNet(in_channels=1, out_channels=1, use_attention=use_attention).to(device)
         elif "RicianNet" in model_name:
-            model = RicianNet   ().to(device)
+            model = RicianNet().to(device)
         else:
             model = DnCNN().to(device)
             
         model.load_state_dict(torch.load(weight_path, map_location=device, weights_only=True))
         model.eval()
         loaded_models[model_name] = model
-        print(f"   ✅ 模型 [{model_name}] 加载成功！")
+        attention_status = "✅" if ("UNet" in model_name and "Attention" in model_name) else ""
+        print(f"   ✅ 模型 [{model_name}] 加载成功！{attention_status}")
 
     if not loaded_models:
         raise RuntimeError("没有成功加载任何模型！")
