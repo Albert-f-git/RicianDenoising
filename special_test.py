@@ -31,13 +31,15 @@ CONFIG = {
         # "UNet_SSIMLoss": "experiments\\Unet_SSIMLoss_20260312_182138\model_weights_final.pth", # Unet_SSIMLoss
         # "UNet_SSIMLoss_epoch150": "experiments\\Unet_SSIMLoss_epoch150_20260313_173033\model_weights_final.pth", # Unet_SSIMLoss_epoch150
         # "UNet_Sliding_Patch64_Slide14": "experiments\\Unet_Sliding_Patch64_Stride14_AdamW_20260305_133805\model_weights.pth", # Unet_Sliding_Patch64_Stride14_AdamW
-        "UNet_Sliding_Patch64_Slide14": "experiments\\Unet_Sliding_Patch64_Stride14_SSIMLoss_20260312_195618\model_weights_final.pth", # Unet_Sliding_Patch64_Stride14_SSIMLoss
+        # "UNet_Sliding_Patch64_Slide14": "experiments\\Unet_Sliding_Patch64_Stride14_SSIMLoss_20260312_195618\model_weights_final.pth", # Unet_Sliding_Patch64_Stride14_SSIMLoss
         # "UNet_Random_Patch64": "experiments\\Unet_Random_Patch64_AdamW_20260306_135850\model_weights.pth", # Unet_Random_Patch64
         # "UNet_Random_Patch64_SSIMLoss": "experiments\\Unet_Random_Patch64_SSIMLoss_20260313_123947\model_weights_final.pth", # Unet_Random_Patch64_SSIMLoss
-        "UNet_Random_Patch64_epoch1500": "experiments\\Unet_Random_Patch64_SSIMLoss_epoch1500_20260313_153944\model_weights_final.pth", # Unet_Random_Patch64_SSIMLoss_epoch1500
-        "UNet_Attention_Random_Patch64_epoch1500": "experiments\\Unet_Attention_Random_Patch64_SSIMLoss_20260316_182600\model_weights_final.pth", # Unet_Attention_Random_Patch64_SSIMLoss_epoch1500
+        # "UNet_Random_Patch64_epoch1500": "experiments\\Unet_Random_Patch64_SSIMLoss_epoch1500_20260313_153944\model_weights_final.pth", # Unet_Random_Patch64_SSIMLoss_epoch1500
+        # "UNet_Attention_Random_Patch64_epoch1500": "experiments\\Unet_Attention_Random_Patch64_SSIMLoss_20260316_182600\model_weights_final.pth", # Unet_Attention_Random_Patch64_SSIMLoss_epoch1500
         "UNet_Random_Patch128_epoch1000": "experiments\\Unet_Random_Patch128_SSIMLoss_20260313_181510\model_weights_final.pth", # Unet_Random_Patch128_SSIMLoss_epoch1000
+        "UNet_Random_Patch128_epoch600_GC_SGDR": "experiments\\Unet_Random_Patch128_epoch600_GC_SGDR_20260317_180641\model_weights_final.pth", # Unet_Random_Patch128_epoch600_GC_SGDR
         "UNet_Attention_Random_Patch128_epoch1000": "experiments\\Unet_Attention_Random_Patch128_SSIMLoss_20260316_212839\model_weights_final.pth", # Unet_Attention_Random_Patch128_SSIMLoss_epoch1000
+        "UNet_Attention_Random_Patch128_epoch600_GC_SGDR": "experiments\\Unet_Attention_Random_Patch128_epoch600_GC_SGDR_20260317_145634\model_weights_final.pth", # Unet_Attention_Random_Patch128_epoch600_GC_SGDR
         },
     "images": [
         {"path": "data\special_test\\brain1_simulate.png", "type": "simulated"}, 
@@ -55,7 +57,7 @@ CONFIG = {
     #     {"path": "data\special_test\\brain5_real.png", "type": "real"}
     # ],
     "noise_level": 0.10,          
-    "save_dir": "special_results\\UNet_Random_SSIMLoss_comparison", 
+    "save_dir": "special_results\\UNet_Random_patch128_comparison", 
 }
 
 def add_rician_noise(clean_img, sigma):
