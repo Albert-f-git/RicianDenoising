@@ -19,7 +19,7 @@ from models.unet import UNet
 # 1. 核心实验配置区
 # ==========================================
 CONFIG = {
-    "experiment_name": "Unet_Random_Patch128_epoch600_GC_SGDR", # 实验名称，用于区分后续不同模型
+    "experiment_name": "Unet_LeftAttention_Random_Patch128_epoch600_GC_SGDR", # 实验名称，用于区分后续不同模型
     "model_type": "UNet",
     "optimizer_type": "AdamW",  # 'Adam' 或 'AdamW'
     "dataset_mode": "random",       # 'random' (随机裁剪), 'sliding' (滑动窗口), 'full' (全图填充)
@@ -34,7 +34,7 @@ CONFIG = {
     "data_dir": "data/processed/train", # 训练集路径
     "save_dir": "experiments",       # 实验结果统一保存路径
     "resume_weight": None, # 可选: 预训练权重路径，若不使用预训练则设为 None
-    "use_attention": False # 是否使用注意力机制
+    "use_attention": True # 是否使用注意力机制
 }
 
 def train():

@@ -344,9 +344,9 @@ CONFIG = {
     "use_attention": False # 是否使用注意力机制
 }
 ```
+**结果**: 梯度裁剪和随机梯度下降的确可以缩短训练用时。
 
-
-# UNet with Attention
+# UNet with FullAttention
 ## Random, patch64, SSIMLoss, epoch1500
 ```python
 CONFIG = {
@@ -396,7 +396,7 @@ CONFIG = {
 ## Random, patch128, SSIMLoss, epoch600，Gradient Clipping, CosineAnnealingLR
 ```python
 CONFIG = {
-    "experiment_name": "Unet_Attention_Random_Patch128_epoch800_GC_SGDR", # 实验名称，用于区分后续不同模型
+    "experiment_name": "Unet_Attention_Random_Patch128_epoch600_GC_SGDR", # 实验名称，用于区分后续不同模型
     "model_type": "UNet",
     "optimizer_type": "AdamW",  # 'Adam' 或 'AdamW'
     "dataset_mode": "random",       # 'random' (随机裁剪), 'sliding' (滑动窗口), 'full' (全图填充)
@@ -415,3 +415,26 @@ CONFIG = {
 }
 ```
 **结果**: 600轮训练就达到了之前1000轮的训练效果。
+
+# UNet with Attention skipping
+```python
+CONFIG = {
+    "experiment_name": "Unet_LeftAttention_Random_Patch128_epoch600_GC_SGDR", # 实验名称，用于区分后续不同模型
+    "model_type": "UNet",
+    "optimizer_type": "AdamW",  # 'Adam' 或 'AdamW'
+    "dataset_mode": "random",       # 'random' (随机裁剪), 'sliding' (滑动窗口), 'full' (全图填充)
+    "patch_size": 128,               # 裁剪大小
+    "stride": 32,                    # 滑动窗口步长
+    "batch_size": 64,               # 显存最大占用
+    "num_epochs": 600,               # 训练轮数 
+    "learning_rate": 1e-4,          # 初始学习率
+    "weight_decay": 1e-4,
+    "noise_range": (0, 0.3),    # Rician 噪声区间
+    "use_warmup": False,          # 是否使用热重启 (OneCycleLR)
+    "data_dir": "data/processed/train", # 训练集路径
+    "save_dir": "experiments",       # 实验结果统一保存路径
+    "resume_weight": None, # 可选: 预训练权重路径，若不使用预训练则设为 None
+    "use_attention": True # 是否使用注意力机制
+}
+```
+**结果**: SSIM优势巨大。训练时间和No Attention模型接近，低于UNet滑动窗口，远低于DnCNN滑动窗口。

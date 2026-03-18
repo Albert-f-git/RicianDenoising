@@ -27,7 +27,7 @@ class CBAM(nn.Module):
         )
 
     def forward(self, x):
-        # 通道注意力：同时使用AvgPool和MaxPool
+        # 通道注意力
         avg_out = self.channel_attention(x)
         max_out = self.channel_attention_max(x)
         ca = self.sigmoid(avg_out + max_out)
@@ -41,9 +41,9 @@ class CBAM(nn.Module):
 
 class DoubleConv(nn.Module):
     """(Conv2d => BatchNorm => ReLU) * 2"""
-    def __init__(self, in_channels, out_channels, use_attention=False):
+    # 去除了内部的 Attention 逻辑，让它回归纯粹的特征提取
+    def __init__(self, in_channels, out_channels):
         super().__init__()
-        self.use_attention = use_attention
         self.double_conv = nn.Sequential(
             nn.Conv2d(in_channels, out_channels, kernel_size=3, padding=1, bias=False),
             nn.BatchNorm2d(out_channels),
@@ -52,82 +52,74 @@ class DoubleConv(nn.Module):
             nn.BatchNorm2d(out_channels),
             nn.ReLU(inplace=True)
         )
-        if self.use_attention:
-            self.attention = CBAM(out_channels)
 
     def forward(self, x):
-        x = self.double_conv(x)
-        if self.use_attention:
-            x = self.attention(x)
-        return x
+        return self.double_conv(x)
 
 class UNet(nn.Module):
     def __init__(self, in_channels=1, out_channels=1, features=[32, 64, 128, 256], use_attention=True):
-        """
-        为了防止在普通显卡上爆显存，我们将通道数适度缩减为 32 起步 (原版是 64 起步)。
-        这对于单通道的灰度 MRI 去噪已经具备了压倒性的特征提取能力。
-        """
         super(UNet, self).__init__()
         self.use_attention = use_attention
         self.downs = nn.ModuleList()
         self.ups = nn.ModuleList()
         self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
 
-        # -----------------------------------------
-        # 1. 编码器 (Downsampling)
-        # -----------------------------------------
+        # 为跳跃连接准备 Attention 模块列表
+        if self.use_attention:
+            self.attentions = nn.ModuleList()
+            # 因为解码是从深层到浅层，所以这里的特征通道数也要反转匹配
+            for feature in reversed(features):
+                self.attentions.append(CBAM(feature))
+
+        # 1. 编码器 (纯净版，不包含 Attention)
         for feature in features:
-            self.downs.append(DoubleConv(in_channels, feature, use_attention=use_attention))
+            self.downs.append(DoubleConv(in_channels, feature))
             in_channels = feature
 
-        # -----------------------------------------
-        # 2. 瓶颈层 (Bottleneck)
-        # -----------------------------------------
-        self.bottleneck = DoubleConv(features[-1], features[-1] * 2, use_attention=use_attention)
+        # 2. 瓶颈层
+        self.bottleneck = DoubleConv(features[-1], features[-1] * 2)
 
-        # -----------------------------------------
-        # 3. 解码器 (Upsampling + Skip Connections)
-        # -----------------------------------------
+        # 3. 解码器
         for feature in reversed(features):
             self.ups.append(
                 nn.ConvTranspose2d(feature * 2, feature, kernel_size=2, stride=2)
             )
-            self.ups.append(DoubleConv(feature * 2, feature, use_attention=use_attention))
+            self.ups.append(DoubleConv(feature * 2, feature))
 
         self.final_conv = nn.Conv2d(features[0], out_channels, kernel_size=1)
 
     def forward(self, x):
         skip_connections = []
-        identity = x  # 🌟 保存一份原始输入的备份，用于全局残差学习
+        identity = x  
 
-        # --- 编码过程 ---
+        # --- 编码过程 (干净地下采样) ---
         for down in self.downs:
             x = down(x)
-            skip_connections.append(x)
+            skip_connections.append(x) # 存下原始特征图
             x = self.pool(x)
 
-        # --- 瓶颈过程 ---
         x = self.bottleneck(x)
-        skip_connections = skip_connections[::-1] # 反转列表，方便解码器逐层提取
+        skip_connections = skip_connections[::-1] 
 
         # --- 解码过程 ---
         for i in range(0, len(self.ups), 2):
             x = self.ups[i](x)
             skip_connection = skip_connections[i//2]
 
-            # 🛠️ 鲁棒性设计：如果输入尺寸不是完美的 2 的幂次，这里进行动态 Padding 填补边缘
+            # 只在跳跃连接拼接前，对其应用 CBAM 过滤！
+            if self.use_attention:
+                skip_connection = self.attentions[i//2](skip_connection)
+
+            # 鲁棒性 Padding
             if x.shape != skip_connection.shape:
                 diffY = skip_connection.size()[2] - x.size()[2]
                 diffX = skip_connection.size()[3] - x.size()[3]
                 x = F.pad(x, [diffX // 2, diffX - diffX // 2,
                               diffY // 2, diffY - diffY // 2])
 
-            # 在通道维度 (dim=1) 进行跳跃连接的高维拼接
             concat_x = torch.cat((skip_connection, x), dim=1)
             x = self.ups[i+1](concat_x)
 
-        # --- 全局残差学习 (Global Residual Learning) ---
+        # --- 全局残差学习 ---
         noise_pred = self.final_conv(x)
-        
-        # 让网络预测噪声，然后用原图减去噪声得到干净图像
         return identity - noise_pred
