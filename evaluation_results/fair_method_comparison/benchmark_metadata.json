@@ -1,0 +1,43 @@
+{
+  "seed": 20260901,
+  "test_directory": "D:\\Albert\\Desktop\\projects\\RicianDenoising\\data\\processed\\test",
+  "test_images": 334,
+  "noise_levels": [
+    0.05,
+    0.1,
+    0.15,
+    0.2,
+    0.25,
+    0.3
+  ],
+  "qualitative_image": "T1_axial_047.npy",
+  "qualitative_noise_levels": [
+    0.1,
+    0.2,
+    0.3
+  ],
+  "roi_xywh": [
+    87,
+    121,
+    52,
+    52
+  ],
+  "metric_region": "foreground mask for both PSNR and SSIM",
+  "inference_mode": "full slice, zero-pad right/bottom to multiple of 16",
+  "device": "cuda",
+  "models": [
+    {
+      "name": "DnCNN",
+      "weight": "D:\\Albert\\Desktop\\projects\\RicianDenoising\\experiments\\DnCNN_Sliding_Patch64_Stride14_AdamW_20260302_230306\\model_weights.pth"
+    },
+    {
+      "name": "RicianNet",
+      "weight": "D:\\Albert\\Desktop\\projects\\RicianDenoising\\experiments\\Stage1\\RicianNet_random_Patch128_AdamW_20260307_203419\\model_weights.pth"
+    },
+    {
+      "name": "Attention U-Net",
+      "weight": "D:\\Albert\\Desktop\\projects\\RicianDenoising\\experiments\\Unet_LeftAttention_Random_Patch128_epoch600_GC_SGDR_20260318_151922\\model_weights_final.pth"
+    }
+  ],
+  "elapsed_seconds": 137.91237360000378
+}

@@ -1,0 +1,101 @@
+{
+  "seed": 20260901,
+  "test_directory": "D:\\Albert\\Desktop\\projects\\RicianDenoising\\data\\processed\\test",
+  "test_images": 334,
+  "noise_levels": [
+    0.05,
+    0.1,
+    0.15,
+    0.2,
+    0.25,
+    0.3
+  ],
+  "qualitative_image": "T1_axial_047.npy",
+  "qualitative_noise_levels": [
+    0.1,
+    0.2,
+    0.3
+  ],
+  "roi_xywh": [
+    87,
+    121,
+    52,
+    52
+  ],
+  "metric_region": "same GT-derived foreground mask for PSNR and SSIM",
+  "shared_input": "same deterministic noisy realization as fair_method_comparison",
+  "reused_deep_metrics_from": "D:\\Albert\\Desktop\\projects\\RicianDenoising\\evaluation_results\\fair_method_comparison",
+  "reused_chen_metrics": true,
+  "method_types": {
+    "Noisy": "Input baseline",
+    "DnCNN": "Deep learning",
+    "RicianNet": "Deep learning (Li et al., 2020)",
+    "Attention U-Net": "Deep learning",
+    "Chen-Zeng (2015)": "Numerical / variational",
+    "Liu et al. (2022)": "Numerical / variational"
+  },
+  "numerical_parameters": {
+    "Chen-Zeng (2015)": {
+      "gamma": 0.035,
+      "maximum_iterations": 2000,
+      "minimum_iterations": 25,
+      "relative_change_tolerance": 1e-05,
+      "foreground_domain": "GT-derived support mask with no-flux TV boundary",
+      "bias_correction_c": 1.2,
+      "mean_iterations": 1815.8617764471057,
+      "minimum_used_iterations": 738,
+      "maximum_used_iterations": 2000,
+      "converged_cases": 334,
+      "total_cases": 2004,
+      "reused_from_previous_deterministic_run": true
+    },
+    "Liu et al. (2022)": {
+      "parameter_source": "Liu et al. (2022), Figure 2 caption",
+      "mapping_rule": "nearest reported 8-bit sigma among 15, 25, and 35; clamp outside range",
+      "schedule": {
+        "0.05": {
+          "sigma_8bit": 12.75,
+          "nearest_paper_sigma": 15.0,
+          "alpha": 0.015,
+          "beta": 0.08
+        },
+        "0.10": {
+          "sigma_8bit": 25.5,
+          "nearest_paper_sigma": 25.0,
+          "alpha": 0.01,
+          "beta": 0.045
+        },
+        "0.15": {
+          "sigma_8bit": 38.25,
+          "nearest_paper_sigma": 35.0,
+          "alpha": 0.005,
+          "beta": 0.03
+        },
+        "0.20": {
+          "sigma_8bit": 51.0,
+          "nearest_paper_sigma": 35.0,
+          "alpha": 0.005,
+          "beta": 0.03
+        },
+        "0.25": {
+          "sigma_8bit": 63.75,
+          "nearest_paper_sigma": 35.0,
+          "alpha": 0.005,
+          "beta": 0.03
+        },
+        "0.30": {
+          "sigma_8bit": 76.5,
+          "nearest_paper_sigma": 35.0,
+          "alpha": 0.005,
+          "beta": 0.03
+        }
+      },
+      "r": 1.0,
+      "maximum_iterations": 500,
+      "relative_change_tolerance": 0.0001,
+      "chambolle_inner_iterations": 2,
+      "adaptive_g_c": 2.0
+    }
+  },
+  "elapsed_seconds": 438.97246540000197
+}
